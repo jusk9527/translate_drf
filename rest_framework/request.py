@@ -7,6 +7,15 @@ The wrapped request then offers a richer API, in particular :
       and available as `request.data`
     - full support of PUT method, including support for file uploads
     - form overloading of HTTP method, content type and content
+
+请求类用作标准请求对象的包装器
+
+然后，包装的请求提供了更丰富的API,特别是：
+
+    - 根据content Type 标题自动分析内容
+    - 并作为request.data提供
+    - 完全支持PUT方法，包括支持文件上传
+
 """
 import io
 import sys
@@ -25,6 +34,8 @@ from rest_framework.settings import api_settings
 def is_form_media_type(media_type):
     """
     Return True if the media type is a valid form media type.
+
+    吐过媒体类型是有效的表单媒体类型，则返回True
     """
     base_media_type, params = parse_header(media_type.encode(HTTP_HEADER_ENCODING))
     return (base_media_type == 'application/x-www-form-urlencoded' or
@@ -40,6 +51,14 @@ class override_method:
 
         with override_method(view, request, 'POST') as request:
             ... # Do stuff with `view` and `request`
+
+    在请求时临时重写方法的上下文管理器
+
+    另外还设置了view.request属性
+
+    用法：
+        使用override_方法（view, request,POST）作为请求：
+        使用view 和request进行操作
     """
 
     def __init__(self, view, request, method):
@@ -69,6 +88,8 @@ def wrap_attributeerrors():
     """
     Used to re-raise AttributeErrors caught during authentication, preventing
     these errors from otherwise being handled by the attribute access protocol.
+
+    用于重新引发身份验证期间捕获的AttributeRors，防止这些错误由属性访问协议处理
     """
     try:
         yield
@@ -82,6 +103,9 @@ class Empty:
     """
     Placeholder for unset attributes.
     Cannot use `None`, as that may be a valid value.
+
+    未设置属性的占位符
+    不能使用None, 因为这是一个有效值
     """
     pass
 
@@ -94,6 +118,8 @@ def clone_request(request, method):
     """
     Internal helper method to clone a request, replacing with a different
     HTTP method.  Used for checking permissions against other methods.
+
+    克隆请求的尼日不帮助程序方法，替换为其他HTTP方法，用于对照其他方法检查权限
     """
     ret = Request(request=request._request,
                   parsers=request.parsers,
@@ -127,6 +153,10 @@ class ForcedAuthentication:
     """
     This authentication class is used if the test client or request factory
     forcibly authenticated the request.
+
+    如果测试客户端或请求工厂
+
+    强制验证请求
     """
 
     def __init__(self, force_user, force_token):
@@ -147,6 +177,14 @@ class Request:
           request content.
         - authentication_classes(list/tuple). The authentications used to try
           authenticating the request's user.
+
+    允许增强标准 HttpRequest 实例的包装器
+
+        - 请求（HttpRequest） 原始请求实例
+        - 语法分析类（列表、元组）。用于分析
+        请求内容
+        - 身份验证类（列表、元组）。用于尝试的身份验证
+        正在验证请求的用户
     """
 
     def __init__(self, request, parsers=None, authenticators=None,
@@ -192,6 +230,8 @@ class Request:
     def stream(self):
         """
         Returns an object that may be used to stream the request content.
+
+        返回可用于stream处理请求内容的对象
         """
         if not _hasattr(self, '_stream'):
             self._load_stream()
@@ -201,6 +241,8 @@ class Request:
     def query_params(self):
         """
         More semantically correct name for request.GET.
+
+        从语义上来说，请更正reques.GET的名称
         """
         return self._request.GET
 
@@ -215,8 +257,10 @@ class Request:
         """
         Returns the user associated with the current request, as authenticated
         by the authentication classes provided to the request.
+        
+        返回与当前请求关联的经过身份验证的用户，提供给请求的身份验证
         """
-        # 判断如果_user 值为空的话，一般都为空，谁没事将设置user的属性，当然也不排除这个可能就是
+        # 判断如果_user 不在request中的话，执行 self._authenticate()这个方法
         if not hasattr(self, '_user'):
             with wrap_attributeerrors():
                 # 执行认证方法
@@ -233,6 +277,15 @@ class Request:
 
         Note that we also set the user on Django's underlying `HttpRequest`
         instance, ensuring that it is available to any middleware in the stack.
+
+        设置当前请求的用户，这是必要的
+
+        与当前属性为django.contrib.auth兼容
+
+        在登录和注销功能中设置
+
+        注意，我们还在django的底层HttpRequest上设置了用户
+        实例，确保栈中的任何中间件都可以使用它
         """
         self._user = value
         self._request.user = value
@@ -242,6 +295,8 @@ class Request:
         """
         Returns any non-user authentication information associated with the
         request, such as an authentication token.
+
+        置用户关于认证请求的信息，如身份验证令牌
         """
         if not hasattr(self, '_auth'):
             with wrap_attributeerrors():
@@ -253,6 +308,8 @@ class Request:
         """
         Sets any non-user authentication information associated with the
         request, such as an authentication token.
+
+        设置用户关于认证请求的信息，比如身份验证令牌
         """
         self._auth = value
         self._request.auth = value
@@ -262,6 +319,8 @@ class Request:
         """
         Return the instance of the authentication instance class that was used
         to authenticate the request, or `None`.
+
+        返回使用的身份验证实例类的实例，验证请求，或“无”
         """
         if not hasattr(self, '_authenticator'):
             with wrap_attributeerrors():
@@ -271,6 +330,8 @@ class Request:
     def _load_data_and_files(self):
         """
         Parses the request content into `self.data`.
+
+        将请求内容解析为self.data
         """
         if not _hasattr(self, '_data'):
             self._data, self._files = self._parse()
@@ -281,7 +342,10 @@ class Request:
                 self._full_data = self._data
 
             # if a form media type, copy data & files refs to the underlying
-            # http request so that closable objects are handled appropriately.
+            #             # http request so that closable objects are handled appropriately.
+
+            # 如果表单媒体类型，则将数据和文件负责到基础
+            # http请求，以便适当地处理可关闭对象
             if is_form_media_type(self.content_type):
                 self._request._post = self.POST
                 self._request._files = self.FILES
@@ -289,6 +353,8 @@ class Request:
     def _load_stream(self):
         """
         Return the content body of the request, as a stream.
+
+        以stream的形式返回请求的内容体
         """
         meta = self._request.META
         try:
@@ -308,6 +374,8 @@ class Request:
     def _supports_form_parsing(self):
         """
         Return True if this requests supports parsing form data.
+
+        如果此请求支持分析表单数据，则返回True
         """
         form_media = (
             'application/x-www-form-urlencoded',
@@ -320,6 +388,10 @@ class Request:
         Parse the request content, returning a two-tuple of (data, files)
 
         May raise an `UnsupportedMediaType`, or `ParseError` exception.
+
+        解析请求内容，返回两个元组（数据、文件）
+
+        可能引发UnsupportedMediaType 或 ParseError异常
         """
         media_type = self.content_type
         try:
@@ -330,6 +402,9 @@ class Request:
             # If request.POST has been accessed in middleware, and a method='POST'
             # request was made with 'multipart/form-data', then the request stream
             # will already have been exhausted.
+
+            # 如果在中间件中访问了request.POST,并且方法为POST,使用multipart/form data，然后请求流
+
             if self._supports_form_parsing():
                 return (self._request.POST, self._request.FILES)
             stream = None
@@ -372,6 +447,8 @@ class Request:
         """
         Attempt to authenticate the request using each authentication instance
         in turn.
+
+        尝试使用每个身份验证实例对请求进行身份验证
         """
 
         # self.get_authenticators() 他返回的是每个认证类的的实例
@@ -405,6 +482,8 @@ class Request:
         Set authenticator, user & authtoken representing an unauthenticated request.
 
         Defaults are None, AnonymousUser & None.
+
+        设置authenticator,user,authtoken,表示未经身份验证的请求
         """
         self._authenticator = None
 
@@ -422,6 +501,8 @@ class Request:
         """
         If an attribute does not exist on this instance, then we also attempt
         to proxy it to the underlying HttpRequest object.
+
+        如果此实例上不存在属性，则我们也尝试将其带到底层HttpRequest对象
         """
         try:
             return getattr(self._request, attr)
