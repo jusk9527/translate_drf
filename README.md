@@ -36,7 +36,7 @@
 
 #### chapter05 drf-频率分析
 
-- [drf频率](./Authentication.md)
+- [drf频率](./Throttles.md)
 - 
 
 #### chapter06 drf-API版本分析
