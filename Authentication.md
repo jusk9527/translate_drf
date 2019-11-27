@@ -1,5 +1,7 @@
-### drf认证
 
+### 源码流程
+
+![](https://raw.githubusercontent.com/jusk9527/images/master/data/20191114111308.png)
 
 #### 一、认证源码过程解析
 
@@ -508,9 +510,6 @@ authentication_classes =[]
 
 ### 总结
 
-#### 源码流程
-
-![](https://raw.githubusercontent.com/jusk9527/images/master/data/20191114111308.png)
 
 
 ### 参考资料

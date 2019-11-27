@@ -17,8 +17,6 @@ def api_view(http_method_names=None):
     """
     Decorator that converts a function-based view into an APIView subclass.
     Takes a list of allowed methods for the view as an argument.
-
-    将基于函数的视图转换为APIView子类的修饰程序。将视图语序的方法的列表作为参数
     """
     http_method_names = ['GET'] if (http_method_names is None) else http_method_names
 

@@ -12,6 +12,9 @@ from rest_framework.utils.mediatypes import (
 
 
 class BaseContentNegotiation:
+    """
+    获取解析器基类，选择哪个解析器所有的选择解析器必须继承这两个方法select_parser,select_renderer
+    """
     def select_parser(self, request, parsers):
         raise NotImplementedError('.select_parser() must be implemented')
 

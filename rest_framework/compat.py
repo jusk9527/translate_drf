@@ -1,10 +1,6 @@
 """
 The `compat` module provides support for backwards compatibility with older
 versions of Django/Python, and compatibility wrappers around optional packages.
-
-compat 模板支持与旧版本的向后兼容
-
-django/python 的版本，以及可选包周围的兼容性包装
 """
 import sys
 
@@ -33,9 +29,6 @@ def get_original_route(urlpattern):
     """
     Get the original route/regex that was typed in by the user into the path(), re_path() or url() directive. This
     is in contrast with get_regex_pattern below, which for RoutePattern returns the raw regex generated from the path().
-
-    获取用户在path()、re_path()或url()指令中键入的原始路由\正则表达式，这个与下面的get_regex_模式相反，后者for RoutePattern返回path()
-    生成的原始
     """
     if hasattr(urlpattern, 'pattern'):
         # Django 2.0
@@ -49,8 +42,6 @@ def get_regex_pattern(urlpattern):
     """
     Get the raw regex out of the urlpattern's RegexPattern or RoutePattern. This is always a regular expression,
     unlike get_original_route above.
-
-    从urlpattern的RegexPattern中获取regex,这总是一个正则表达式，与上面的获取原始路径 不同
     """
     if hasattr(urlpattern, 'pattern'):
         # Django 2.0

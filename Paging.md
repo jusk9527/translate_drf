@@ -1,155 +1,22 @@
-"""
-Pagination serializers determine the structure of the output that should
-be used for paginated responses.
-"""
-from base64 import b64decode, b64encode
-from collections import OrderedDict, namedtuple
-from urllib import parse
+### 内置分页器
+#### 分页基类
 
-from django.core.paginator import InvalidPage
-from django.core.paginator import Paginator as DjangoPaginator
-from django.template import loader
-from django.utils.encoding import force_str
-from django.utils.translation import gettext_lazy as _
-
-from rest_framework.compat import coreapi, coreschema
-from rest_framework.exceptions import NotFound
-from rest_framework.response import Response
-from rest_framework.settings import api_settings
-from rest_framework.utils.urls import remove_query_param, replace_query_param
-
-
-def _positive_int(integer_string, strict=False, cutoff=None):
-    """
-    Cast a string to a strictly positive integer.
-    """
-    ret = int(integer_string)
-    if ret < 0 or (ret == 0 and strict):
-        raise ValueError()
-    if cutoff:
-        return min(ret, cutoff)
-    return ret
-
-
-def _divide_with_ceil(a, b):
-    """
-    Returns 'a' divided by 'b', with any remainder rounded up.
-    """
-    if a % b:
-        return (a // b) + 1
-
-    return a // b
-
-
-def _get_displayed_page_numbers(current, final):
-    """
-    This utility function determines a list of page numbers to display.
-    This gives us a nice contextually relevant set of page numbers.
-
-    For example:
-    current=14, final=16 -> [1, None, 13, 14, 15, 16]
-
-    This implementation gives one page to each side of the cursor,
-    or two pages to the side when the cursor is at the edge, then
-    ensures that any breaks between non-continuous page numbers never
-    remove only a single page.
-
-    For an alternative implementation which gives two pages to each side of
-    the cursor, eg. as in GitHub issue list pagination, see:
-
-    https://gist.github.com/tomchristie/321140cebb1c4a558b15
-    """
-    assert current >= 1
-    assert final >= current
-
-    if final <= 5:
-        return list(range(1, final + 1))
-
-    # We always include the first two pages, last two pages, and
-    # two pages either side of the current page.
-    included = {1, current - 1, current, current + 1, final}
-
-    # If the break would only exclude a single page number then we
-    # may as well include the page number instead of the break.
-    if current <= 4:
-        included.add(2)
-        included.add(3)
-    if current >= final - 3:
-        included.add(final - 1)
-        included.add(final - 2)
-
-    # Now sort the page numbers and drop anything outside the limits.
-    included = [
-        idx for idx in sorted(list(included))
-        if 0 < idx <= final
-    ]
-
-    # Finally insert any `...` breaks
-    if current > 4:
-        included.insert(1, None)
-    if current < final - 3:
-        included.insert(len(included) - 1, None)
-    return included
-
-
-def _get_page_links(page_numbers, current, url_func):
-    """
-    Given a list of page numbers and `None` page breaks,
-    return a list of `PageLink` objects.
-    """
-    page_links = []
-    for page_number in page_numbers:
-        if page_number is None:
-            page_link = PAGE_BREAK
-        else:
-            page_link = PageLink(
-                url=url_func(page_number),
-                number=page_number,
-                is_active=(page_number == current),
-                is_break=False
-            )
-        page_links.append(page_link)
-    return page_links
-
-
-def _reverse_ordering(ordering_tuple):
-    """
-    Given an order_by tuple such as `('-created', 'uuid')` reverse the
-    ordering and return a new tuple, eg. `('created', '-uuid')`.
-    """
-    def invert(x):
-        return x[1:] if x.startswith('-') else '-' + x
-
-    return tuple([invert(item) for item in ordering_tuple])
-
-
-Cursor = namedtuple('Cursor', ['offset', 'reverse', 'position'])
-PageLink = namedtuple('PageLink', ['url', 'number', 'is_active', 'is_break'])
-
-PAGE_BREAK = PageLink(url=None, number=None, is_active=False, is_break=True)
-
-
+```
 class BasePagination:
     display_page_controls = False
 
-    # 数据集
     def paginate_queryset(self, queryset, request, view=None):  # pragma: no cover
         raise NotImplementedError('paginate_queryset() must be implemented.')
 
-
-    # 返回响应数据
     def get_paginated_response(self, data):  # pragma: no cover
         raise NotImplementedError('get_paginated_response() must be implemented.')
 
-    # 返回响应的数据流
     def get_paginated_response_schema(self, schema):
         return schema
-
 
     def to_html(self):  # pragma: no cover
         raise NotImplementedError('to_html() must be implemented to display page controls.')
 
-    # 获取结果
     def get_results(self, data):
         return data['results']
 
@@ -159,8 +26,14 @@ class BasePagination:
 
     def get_schema_operation_parameters(self, view):
         return []
+```
 
-
+#### PageNumberPagination
+- 普通分页，查看第n页，每个页面显示n条数据
+- for example
+- http://api.example.org/accounts/?page=4
+- http://api.example.org/accounts/?page=4&page_size=100
+```
 class PageNumberPagination(BasePagination):
     """
     A simple page number based style that supports page numbers as
@@ -375,7 +248,15 @@ class PageNumberPagination(BasePagination):
             )
         return parameters
 
+```
 
+#### LimitOffsetPagination
+- 基于位置的分页，在第n个位置，向后查看n条数据，和数据库的sql语句中的limit offset类似，参数offet代表位置，limit代表取多少条数据
+- for example
+- http://api.example.org/accounts/?limit=100
+- http://api.example.org/accounts/?offset=400&limit=100
+
+```
 class LimitOffsetPagination(BasePagination):
     """
     A limit/offset based style. For example:
@@ -595,8 +476,14 @@ class LimitOffsetPagination(BasePagination):
             },
         ]
         return parameters
+```
 
+#### CursorPagination
 
+- 游标分页，意思就是每次返回当前页、上一页、下一页，并且每次的上一页和下一页的url是不规则的
+- 优点是不管数据多大快的很
+
+```
 class CursorPagination(BasePagination):
     """
     The cursor pagination implementation is necessarily complex.
@@ -1001,3 +888,71 @@ class CursorPagination(BasePagination):
                 }
             )
         return parameters
+
+```
+
+#### 使用实例
+
+- get方法请求实例
+```
+from rest_framework import serializers
+from rest_framework.response import Response   #使用DRF自带的响应页面更美观
+from rest_framework.pagination import PageNumberPagination
+
+class Mypagination(PageNumberPagination):
+    """自定义分页"""
+    page_size=2  #默认每页显示个数配置
+    page_query_param = 'p' # 页面传参的key,默认是page
+    page_size_query_param='size'  # 指定每页显示个数参数
+    max_page_size=4 # 每页最多显示个数配置，使用以上配置，可以支持每页可显示2~4条数据
+
+class RolesSerializer(serializers.Serializer): #定义序列化类
+    id=serializers.IntegerField()  #定义需要提取的序列化字段,名称和model中定义的字段相同
+    name=serializers.CharField()
+class RoleView(APIView):
+    """角色"""
+    def get(self,request,*args,**kwargs):
+        roles=models.Role.objects.all() # 获取所有数据
+
+        pg_obj=Mypagination()  # 实例化分页类
+        pg_res=pg_obj.paginate_queryset(queryset=roles,request=request,view=self)
+        # 获取分页数据，参数一 分页的数据，QuerySet类型，请求request,分页的视图，self代表自己
+        res=RolesSerializer(instance=pg_res,many=True)  # 对分完页码的数据进行序列化
+        return pg_obj.get_paginated_response(res.data)   # 使用分页自带的respose返回，具有上一页下一页功能
+```
+
+
+- ModelViewSet等继承的使用
+
+
+```
+class UserViewSet(ModelViewSet):
+    '''
+    用户管理：增删改查
+
+    list:
+        获取所有用户信息+id获取某人具体信息
+    create:
+        添加用户信息
+    delete:
+        删除用户信息
+    update:
+        修改用户信息
+    '''
+    perms_map = ({'*': 'admin'}, {'*': 'user_all'}, {'get': 'user_list'}, {'post': 'user_create'}, {'put': 'user_edit'},
+                 {'delete': 'user_delete'})
+    queryset = UserProfile.objects.all()
+    serializer_class = UserListSerializer
+    pagination_class = CommonPagination
+    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filter_fields = ('is_active',)
+    search_fields = ('username', 'name', 'mobile', 'email')
+    ordering_fields = ('id',)
+    authentication_classes = (JSONWebTokenAuthentication,SessionAuthentication)
+    # permission_classes = (RbacPermission,)
+```
+
+
+参考连接：
+- https://juejin.im/post/5aae68025188255589499930
+- https://www.cnblogs.com/wdliu/p/9142832.html

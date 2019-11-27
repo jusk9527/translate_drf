@@ -33,6 +33,8 @@ class BaseParser:
     All parsers should extend `BaseParser`, specifying a `media_type`
     attribute, and overriding the `.parse()` method.
     """
+
+    # 解析的Content-type类型
     media_type = None
 
     def parse(self, stream, media_type=None, parser_context=None):
@@ -48,10 +50,16 @@ class JSONParser(BaseParser):
     """
     Parses JSON-serialized data.
     """
+
+
+    # 解析的Content-type类型
+
     media_type = 'application/json'
     renderer_class = renderers.JSONRenderer
     strict = api_settings.STRICT_JSON
 
+
+    # 该方法用于解析请求体
     def parse(self, stream, media_type=None, parser_context=None):
         """
         Parses the incoming bytestream as JSON and returns the resulting data.
@@ -62,6 +70,8 @@ class JSONParser(BaseParser):
         try:
             decoded_stream = codecs.getreader(encoding)(stream)
             parse_constant = json.strict_constant if self.strict else None
+
+            # 本质使用json类进行解析
             return json.load(decoded_stream, parse_constant=parse_constant)
         except ValueError as exc:
             raise ParseError('JSON parse error - %s' % str(exc))
@@ -71,6 +81,8 @@ class FormParser(BaseParser):
     """
     Parser for form data.
     """
+
+    # form表单解析
     media_type = 'application/x-www-form-urlencoded'
 
     def parse(self, stream, media_type=None, parser_context=None):
@@ -116,6 +128,8 @@ class FileUploadParser(BaseParser):
     """
     Parser for file upload data.
     """
+
+    # 文件上传解析
     media_type = '*/*'
     errors = {
         'unhandled': 'FileUpload parse error - none of upload handlers can handle the stream',

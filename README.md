@@ -12,6 +12,7 @@
 - [Python文档](https://docs.python.org/zh-cn/3/index.html)
 - [django文档]()
 - [drf文档](https://q1mi.github.io/Django-REST-framework-documentation/)
+- [python资料](https://github.com/vinta/awesome-python)
 
 
 #### chapter02 python基础
@@ -29,7 +30,7 @@
 
 #### chapter04 drf-权限分析
 
-- [drf权限](./Authentication.md)
+- [drf权限](./Permission.md)
 - 
 
 
@@ -40,13 +41,13 @@
 
 #### chapter06 drf-API版本分析
 
-- [drf-api版本](./Authentication.md)
+- [drf-api版本](./VersionControl.md)
 - 
 
 
 #### chapter07 drf-解析器分析
 
-- [drf-解析器](./Authentication.md)
+- [drf-解析器](./Parser.md)
 - 
 
 
@@ -58,7 +59,7 @@
 
 #### chapter07 drf- 分页分析
 
-- [drf-序列化](./Authentication.md)
+- [drf-序列化](./Paging.md)
 - 
 
 #### chapter08 drf- 视图与路由分析

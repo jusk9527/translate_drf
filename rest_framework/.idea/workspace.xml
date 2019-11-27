@@ -2,23 +2,63 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5079723e-5bf4-485f-b3ea-a3ce6df657ec" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../apps/school/client.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/rest_framework.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../.idea/Mshop.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/Mshop.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T043504.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T095956.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T100000.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T100042.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T100050.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T100312.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T100342.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T100355.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T100458.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T113512.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-25T113547.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T012614.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T013546.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T015856.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T025302.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T054357.404.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T054411.404.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T054422.404.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T054436.404.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T054518.404.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T094223.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T094232.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T094331.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T100555.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T102700.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T102737.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T104028.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T104108.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T105409.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T112100.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-28T114054.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T011832.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T013823.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T102321.500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T102332.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T104925.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T105100.500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T113659.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T113857.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T114009.500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T114324.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T114907.500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T114921.500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/2019-10-29T115954.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/httpRequests/http-requests-log.http" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MxShop/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../MxShop/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../apps/Statistics/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../apps/Statistics/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../apps/school/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../apps/school/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../apps/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../apps/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/authentication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compat.py" beforeDir="false" afterPath="$PROJECT_DIR$/compat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/decorators.py" beforeDir="false" afterPath="$PROJECT_DIR$/decorators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MxShop/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../MxShop/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../apps/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../apps/users/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../apps/users/views/ser_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../apps/users/views/ser_user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/negotiation.py" beforeDir="false" afterPath="$PROJECT_DIR$/negotiation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pagination.py" beforeDir="false" afterPath="$PROJECT_DIR$/pagination.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parsers.py" beforeDir="false" afterPath="$PROJECT_DIR$/parsers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request.py" beforeDir="false" afterPath="$PROJECT_DIR$/request.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/versioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/versioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,19 +71,21 @@
     <session id="-1011248017">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="4" />
+          <entry key="project.open.time.0" value="2" />
+          <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="1" />
+          <entry key="py" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="1" />
+          <entry key="Python" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -59,15 +101,24 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/authentication.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="64" column="46" lean-forward="true" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="46" />
+            <state relative-caret-position="1600">
+              <caret line="64" selection-start-line="64" selection-end-line="64" />
               <folding>
                 <element signature="e#50#63#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/negotiation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="3" column="3" selection-start-line="3" selection-start-column="3" selection-end-line="3" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -102,7 +153,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -114,6 +164,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -175,17 +226,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -193,13 +237,19 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Remote Host" />
-      <window_info anchor="right" id="Mongo Explorer" />
-      <window_info anchor="right" id="SciView" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Remote Host" order="3" />
+      <window_info anchor="right" id="SciView" order="4" />
+      <window_info anchor="right" id="Mongo Explorer" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,11 +261,18 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/authentication.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="64" column="46" lean-forward="true" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="46" />
+        <state relative-caret-position="1600">
+          <caret line="64" selection-start-line="64" selection-end-line="64" />
           <folding>
             <element signature="e#50#63#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/negotiation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="3" column="3" selection-start-line="3" selection-start-column="3" selection-end-line="3" selection-end-column="3" />
         </state>
       </provider>
     </entry>

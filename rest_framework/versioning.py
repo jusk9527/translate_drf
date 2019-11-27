@@ -68,17 +68,24 @@ class URLPathVersioning(BaseVersioning):
     Host: example.com
     Accept: application/json
     """
+    # 错误信息，可自己定制
     invalid_version_message = _('Invalid version in URL path.')
 
     def determine_version(self, request, *args, **kwargs):
+
+        # 获取, 有怎获取version_param,不然默认settings值version_param = api_settings.VERSION_PARAM
         version = kwargs.get(self.version_param, self.default_version)
+
+        # 如果为版本为空,将settings默认版本放入
         if version is None:
             version = self.default_version
 
+        # 如果不允许，抛出异常
         if not self.is_allowed_version(version):
             raise exceptions.NotFound(self.invalid_version_message)
         return version
 
+    # 反向解析
     def reverse(self, viewname, args=None, kwargs=None, request=None, format=None, **extra):
         if request.version is not None:
             kwargs = {} if (kwargs is None) else kwargs
@@ -167,14 +174,23 @@ class QueryParameterVersioning(BaseVersioning):
     Host: example.com
     Accept: application/json
     """
+    # 当setting.py配置了允许的版本时候，不匹配版本返回的错误信息，可以自己定义
     invalid_version_message = _('Invalid version in query parameter.')
 
+    # 获取版本方法
     def determine_version(self, request, *args, **kwargs):
+
+        # request.query_params方法获取(本质是request.MATE.get), default_version默认是version，是在settings中配置的
         version = request.query_params.get(self.version_param, self.default_version)
+
+        # 不允许的版本抛出异常
         if not self.is_allowed_version(version):
             raise exceptions.NotFound(self.invalid_version_message)
+
+        # 无异常则返回版本号
         return version
 
+    # url 反解析，可以通过该方法生成请求的url
     def reverse(self, viewname, args=None, kwargs=None, request=None, format=None, **extra):
         url = super().reverse(
             viewname, args, kwargs, request, format, **extra

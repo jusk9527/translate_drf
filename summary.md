@@ -295,6 +295,84 @@ cursor.fetchone()
 cursor.fetchall()
 ```
 
+4. orm高级用法
+
+    - 大于、大于等于
+    
+    ```
+    __gt                    # 大于
+    __gte                   # 大于等于>=
+    
+    Students.objects.filter(age__gt=10)         //查询年龄大于10的学生
+    Studnets.objects.filter(age__gte=10)        // 查询年龄大于等于10岁的学生
+    ```
+    
+    - 小于、小于等于
+    ```
+    __lt                    # 小于<
+    __lte                   # 小于等于<=
+    
+    Students.objects.filter(age__lt=10)         //查询年龄小于10岁的学生
+    Students.objects.filter(age__lte=10)        //查询年龄小于等于10岁的学生
+    
+    ```
+    - like
+    
+    ```
+    __exact                 # 精确等于          //like "aaa"
+    __iexact                # 精确等于          //忽略大小写 ilike  "aaa"
+    __contains              # 包含              // like "%aaa"
+    __icontains             # 包含，忽略大小写  //ilike "aaa",但对于sqlite来说，contains的作用效果等同于icontains
+    
+    
+    ```
+    
+    - in:
+    
+    ```
+    __in
+    
+    Student.objects.filter(age__in=[10,20,30])              # 查询年龄在某一范围的学生
+    
+    
+    ```
+    
+    - is null/is not null:
+    
+    ```
+    __isnull                # 判空
+    Students.objects.filter(name__isnull=True)  //查询用户名为空的学生
+    Students.objects.filter(name__isnull=False) //查询用户名不为空的学生
+    
+    ```
+    
+    - 不等于/不包含于
+    
+    ```
+    Students.objects.filter().excute(age=10)        // 查询年龄不为10的学生
+    Students.objects.filter().excute(age__in=[10,20]        // 查询年龄不在[10,20]的学生
+    
+    ```
+    - 其他常用模糊查询：
+    
+    ```
+    __startswith                                //以...开头
+    __istartswith                               // 以....开头，忽略大小写
+    __endswith                                  // 以...结尾
+    __iendswith                                 // 以...结尾，忽略大小写
+    __range                                     // 在...范围内
+    __year                                      //日期字段的年份
+    __month                                     //日期字段的月份
+    __day                                       // 日期字段的日
+    ```
+
+
+
+
+
+
+
+
 - F与Q的作用
 
 F作用：操作数据表中的某列值，F() 允许Django在啊未实际连接数据库的情况下对数据库字段的引用，不能获取对象放在内存中再对字段进行操作，直接执行原生sql语句操作
@@ -545,6 +623,34 @@ class UserSerializer(serializers.Serializer):
 
 
 ```
+
+
+实现连接序列化
+
+-[HyperlinkedIdentityField](https://www.django-rest-framework.org/api-guide/relations/)
+
+
+```
+class AlbumSerializer(serializers.HyperlinkedModelSerializer):
+    track_listing = serializers.HyperlinkedIdentityField(view_name='track-list')
+
+    class Meta:
+        model = Album
+        fields = ['album_name', 'artist', 'track_listing']
+```
+
+
+
+
+```
+{
+    'album_name': 'The Eraser',
+    'artist': 'Thom Yorke',
+    'track_listing': 'http://www.example.com/api/track_list/12/',
+}
+```
+
+
 
 #### mixin类编写视图
 这个之前已经写过，就不再写了
@@ -876,6 +982,15 @@ class User(models.Model):
 ```
 # 设置过滤
 filter_fields = ("grade_name__name","grade_name__pid__id","fee_name","is_must")
+
+
+
+ class A(models.Model):
+    name = models.CharField(u'名称')
+ class B(models.Model):
+    aa = models.ForeignKey(A)
+ 
+B.objects.filter(aa__name__contains='searchtitle')#查询B表中外键aa所对应的表中字段name包含searchtitle的B表对象。
 ```
 
 
@@ -1360,6 +1475,14 @@ python manage.py startapp [name]                # 创建一个app
     runserver                                   # 使用开发者服务器运行，后面可以加端口
 ```
 
+
+#### 豆瓣源
+
+
+```
+pip install -i https://pypi.douban.com/simple xxx模块
+
+```
 
 
 
