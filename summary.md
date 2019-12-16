@@ -1,15 +1,67 @@
 
+django+drf 前后端分离总结
+=================
+
+  * [<strong>一.django常见问题</strong>](#一django常见问题)
+     * [1. djagno 设计模式](#1django设计模式)
+     * [2. django 的内置组件](#2django的内置组件)
+        * [2-1 认证组件](#2-1认证组件)
+        * [2-2 缓存](#2-2缓存)
+        * [2-3 日志](#2-3日志)
+        * [2-4 邮件](#2-4邮件)
+        * [2-5 分页](#2-5分页)
+        * [2-6 静态文件管理](#2-6静态文件管理)
+     * [3. ORM的一些常用方法](#3orm的一些常用方法)
+        * [3-1 返回Queryset方法的API](#3-1返回queryset方法的api)
+        * [3-2 ORM中能写sql语句的方法](#3-2orm中能写sql语句的方法)
+        * [3-3 ORM高级用法](#3-3orm高级用法)
+        * [3-4 F与Q的作用](#F与Q的作用)
+     * [4. Model中ForeignKey字段中的on_delete参数有什么作用](#4Model中ForeignKey字段中的on_delete参数有什么作用)
+     * [5. Model中怎么ManyToManyField怎么接受删除增加](#5Model中怎么ManyToManyField怎么接受删除增加)
+     * [6. Django实现websocket](#6Django实现websocket)
+ * [<strong>二.DRF常见问题</strong>](#二drf常见问题)
+     * [7. DRF常用组件](#7drf常见组件)
+        * [7-1. 权限组件](#7-1权限组件)
+        * [7-2. 访问频率组件](#7-2访问频率组件)
+        * [7-3. 分页组件](#7-3分页组件)
+        * [7-4. 序列化](#7-4序列化)
+        * [7-5. 解析器](7-5解析器)
+        * [7-6. 认证](#7-6认证)
+     * [8. 项目执行小技巧](#8项目执行小技巧)
+        * [8-1. url的包装](#8-1包装)
+        * [8-2. 初期的状态码定义等](#8-2初期的状态码定义等)
+        * [8-3. 跨域的解决](#8-3跨域的解决)
+        * [8-4. 中间件的问题](#8-4中间件的问题)
+        * [8-5. model转字典](#8-5model转字典)
+        * [8-6. "__"的使用](#8-6"__"的使用)
+        * [8-7. serializers的问题](#8-7serializers的问题)
+        * [8-8. 视图](#8-8视图)
+        * [8-9. 批量删除](#8-9批量删除)
+        * [8-10. 信号](#8-10信号)
+        * [8-11. 依赖包问题](#8-11依赖包的问题)
+        * [8-12. RESTFUL API](#8-12RESTFULAPI)
+        * [8-13. 服务器问题](#8-13服务器问题)
+            * [8-12-1. mysl下载](#8-12-1mysql下载)
+            * [8-12-2. python3.6下载](#8-12-2python3.6下载)
+            * [8-12-3. 虚拟环境的安装](#8-12-4虚拟环境的安装)
+            * [8-12-4. WSGI](#8-12-4WSGI)
+        * [8-14. django的一些常见命令](#8-14django的一些常见命令)
+        * [8-15. 豆瓣源](#8-15豆瓣源)
+        * [8-16. 相关库](#8-16相关)
 
 
+## 一.django常见问题
 
-### [django的内置组件](https://www.cnblogs.com/Mixtea/p/10494455.html)
+### [1.django设计模式](https://github.com/cundi/Django-Design-Patterns-and-Best-Practices)
 
-#### 认证组件
+### [2.django的内置组件](https://www.cnblogs.com/Mixtea/p/10494455.html)
+
+#### [2-1认证组件]()
 
 - auth模块
 
 
-```
+```python
 models
 用户模型主要有下面几个字段：username、password、email、first_name、last_name
 
@@ -34,7 +86,7 @@ logout(request)
 
 
 
-```
+```python
 user = authenticate(username='someone',password='somepassword')
 ```
 
@@ -55,7 +107,7 @@ def my_view(request):
 ```
 
 
-```
+```python
 from django.contrib.auth import logout
    
 def logout_view(request):
@@ -64,13 +116,13 @@ def logout_view(request):
 ```
 
 
-#### [缓存](https://www.cnblogs.com/ZJiQi/p/10590217.html)
+#### [2-2缓存](https://www.cnblogs.com/ZJiQi/p/10590217.html)
 
 
 1. 默认缓存
 
 
-```
+```python
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -82,7 +134,7 @@ CACHES = {
 2. 基于redis的缓存
 
 
-```
+```python
 pip install django-redis
 
 CACHES = {
@@ -103,7 +155,7 @@ CACHES = {
 3. [drf-extensions](https://www.cnblogs.com/derek1184405959/p/8877643.html)
 
 
-```
+```markdown
 pip install drf-extensions
 
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
@@ -112,7 +164,7 @@ from rest_framework_extensions.cache.mixins import CacheResponseMixin
 class GoodsListViewSet(CacheResponseMixin,mixins.ListModelMixin, mixins.RetrieveModelMixin,viewsets.GenericViewSet):
 ```
 
-```
+```python
 setting
 
 #缓存配置
@@ -126,7 +178,7 @@ REST_FRAMEWORK_EXTENSIONS = {
 4. 自定义cache
 
 
-```
+```markdown
 django_redis.cache.RedisCache 都是继承了from django.core.cache.backends.base import BaseCache 
 
 继承实现他就可以
@@ -135,7 +187,7 @@ django_redis.cache.RedisCache 都是继承了from django.core.cache.backends.bas
 
 FBV缓存举例
 
-```
+```markdown
 # 引入装饰器装饰视图函数即可缓存视图
 from django.views.decorators.cache import cache_page
 
@@ -150,7 +202,7 @@ def content_detail(request):
 
 CBV缓存举例
 
-```
+```python
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 import time
@@ -161,18 +213,18 @@ class ShowTime(APIView):
         return render(request,'show_time.html',{'ctime':ctime})
 ```
 
-#### [日志](https://segmentfault.com/a/1190000016068105)
+#### [2-3日志](https://segmentfault.com/a/1190000016068105)
 - 这个可以具体看下这篇博客说的，有效避免了print()
 
 
 
-#### [邮件](https://www.cnblogs.com/zyj-python/p/7522471.html)
+#### [2-4邮件](https://www.cnblogs.com/zyj-python/p/7522471.html)
 
 1. email
 
 settring中配置
 
-```
+```markdown
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = False   #是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
 EMAIL_USE_SSL = True    #是否使用SSL加密，qq企业邮箱要求使用
@@ -183,19 +235,19 @@ EMAIL_HOST_PASSWORD = '*********'         #发送邮件的邮箱密码(这里使
 ```
 
 
-```
+```markdown
 from django.core.mail import send_mail  
 # send_mail的参数分别是  邮件标题，邮件内容，发件箱(settings.py中设置过的那个)，收件箱列表(可以发送给多个人),失败静默(若发送失败，报错提示我们)
 send_mail('Subject here', 'Here is the message.', 'charleschen@xmdaren.com',
     ['to@example.com'], fail_silently=False)
 ```
 
-#### 分页
+#### [2-5分页]()
 
 1. Paginator
 
 
-```
+```python
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -230,10 +282,10 @@ def paginator_view(request):
     template_view = 'page.html'
     return render(request, template_view, {'books': books})
 ```
-#### [静态文件管理](https://juejin.im/entry/5ac439af5188255cb07d52f0)
+#### [2-6静态文件管理](https://juejin.im/entry/5ac439af5188255cb07d52f0)
 
 
-```
+```python
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
@@ -250,11 +302,12 @@ STATICFILES_DIRS = (
 
 
 
-### ORM的一些常用方法
+### [3.ORM的一些常用方法](#)
+- [3-1返回Queryset方法的API](#)
 - 从数据库中查询出来的结果一般是一个集合，这个集合叫做 QuerySet
 
 
-```
+```markdown
 1. filter               # 过滤
 2. exclude              # 排除
 3. annotate             # 聚合
@@ -270,7 +323,7 @@ STATICFILES_DIRS = (
 13. using               # 多个数据库控制QuerySet在那个数据库上求职
 ```
 
-- ROM中能写sql 语句的方法
+- [3-2ROM中能写sql 语句的方法](#)
 
 
 ```
@@ -295,7 +348,7 @@ cursor.fetchone()
 cursor.fetchall()
 ```
 
-4. orm高级用法
+4. [3-3orm高级用法](#)
 
     - 大于、大于等于
     
@@ -323,6 +376,16 @@ cursor.fetchall()
     __iexact                # 精确等于          //忽略大小写 ilike  "aaa"
     __contains              # 包含              // like "%aaa"
     __icontains             # 包含，忽略大小写  //ilike "aaa",但对于sqlite来说，contains的作用效果等同于icontains
+    
+    
+    https://www.54371.net/python/django-model-advanced.html
+    
+    User.objects.filter(Q(state=0) | Q(state=1))
+    
+    #查找不以z开头并且名称中包含有a或b的书籍
+    Book.objects.filter(
+    ~ Q(name__startswith='z') &amp; (Q(name__contains='a') | Q(name__contains='b'))
+)
     
     
     ```
@@ -373,7 +436,7 @@ cursor.fetchall()
 
 
 
-- F与Q的作用
+- [3-4F与Q的作用](#)
 
 F作用：操作数据表中的某列值，F() 允许Django在啊未实际连接数据库的情况下对数据库字段的引用，不能获取对象放在内存中再对字段进行操作，直接执行原生sql语句操作
 
@@ -405,7 +468,7 @@ Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),question__startswith
 ```
 
 
-### Model中ForeignKey字段中的on_delete参数有什么作用
+### [4.Model中ForeignKey字段中的on_delete参数有什么作用](#)
 
 on_delete 有CASCADE、PROTECT、SET_NULL、SET_DEFAULT、SET()
 
@@ -420,7 +483,80 @@ on_delete 有CASCADE、PROTECT、SET_NULL、SET_DEFAULT、SET()
 
 ```
 
-#### djagno 实现websocket
+
+### [5.Model中怎么ManyToManyField怎么接受删除增加](#)
+
+- 本质是对中间表的操作
+
+
+```
+1.models.py中
+class Teams(models.Model):
+   platformId = models.ManyToManyField(Platform, db_column="platformid", verbose_name=u"平台", help_text='平台',
+                                       related_name="platformId", through='RelTeamsPlatform',
+                                       through_fields=('teamId', 'platformId'))
+
+class RelTeamsPlatform(models.Model):
+   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=u'编号', help_text=u'编号')
+   teamId = models.ForeignKey(Teams, db_column="teamid", help_text=u'team编号', verbose_name=u'team编号',
+                              on_delete=models.SET_NULL, null=True, blank=True, related_name='RelTeamsPlatform_teamId')
+   platformId = models.ForeignKey(Platform, db_column="platformid", help_text=u'编号', verbose_name=u'编号',
+                                  on_delete=models.SET_NULL, null=True, blank=True,
+                                  related_name='RelTeamsPlatform_platformId')
+
+class Platform(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=u'编号', help_text=u'编号')
+
+2.serializers.py
+class TeamsCreateSerializer(serializers.ModelSerializer):
+   createTime = serializers.HiddenField(default=datetime.now)
+   createUser = serializers.HiddenField(default=serializers.CurrentUserDefault())
+   platformId =serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=Platform.objects.all())
+
+   class Meta:
+       model = Teams
+       exclude = ('modifyUser', 'modifyTime')
+
+   def create(self, validated_data):
+       tracks_data = validated_data.pop('platformId') #这里是先把Teams中的platformId
+                                                      #这个多对多关系字段剔除出去
+                                                      #tracks_data 就是被剔除出去的字段实例结果
+       team = Teams.objects.create(**validated_data)  #到这里在创建一个teams实例
+       for track_data in tracks_data:
+           RelTeamsPlatform.objects.create(teamId=team, platformId=track_data,
+                                           createUser=validated_data.get('createUser', None)) 
+                                           #到这里是在中间表中把这个关系添加到关系表中
+       return team
+
+class TeamsUpdateSerializer(serializers.ModelSerializer):
+   platformId = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=Platform.objects.all())
+
+   def update(self, instance, validated_data):
+       serializers.raise_errors_on_nested_writes('update', self, validated_data)
+       info = model_meta.get_field_info(instance)
+
+       # list(instance.platformId.all()) 是修改前的数据，
+       # validated_data['platformId'] 是修改后的数据，前后数据做对比，有改变往下面进行，
+       # 没有该表就要
+       if list(instance.platformId.all()) != validated_data['platformId']:  #
+           tracks_data = validated_data.pop('platformId')
+           RelTeamsPlatform.objects.filter(teamId=instance).delete()
+           for track_data in tracks_data:
+               RelTeamsPlatform.objects.create(teamId=instance, platformId=track_data,
+                                               createUser=validated_data.get('modifyUser', None))
+       else:
+           tracks_data = validated_data.pop('platformId')
+       for attr, value in validated_data.items():
+           if attr in info.relations and info.relations[attr].to_many:
+               field = getattr(instance, attr)
+               field.set(value)
+           else:
+               setattr(instance, attr, value)
+       instance.save()
+       return instance
+```
+
+#### [6.djagno 实现websocket](#)
 
 原因：http是对于服务器是被动的，而websocket可以主动发送客户端信息或动作
 - 使用Channels实现websocket
@@ -428,12 +564,12 @@ on_delete 有CASCADE、PROTECT、SET_NULL、SET_DEFAULT、SET()
 https://www.jianshu.com/p/3de90e457bb4
 
 
-
-### 　[drf 常用组件](https://www.cnblogs.com/yuanchenqi/articles/8719520.html)
+## [二.DRF常见问题](#)
+### 　[7.DRF 常用组件](https://www.cnblogs.com/yuanchenqi/articles/8719520.html)
 
 我们知道drf是django的更上一层包装，构建api时前后端分离利器
 
-#### 权限组件
+#### [7-1权限组件](#)
 
 
 
@@ -492,7 +628,7 @@ REST_FRAMEWORK = {
 }
 ```
 
-#### 访问频率组件
+#### [7-2访问频率组件](#)
 
 #####  局部视图 throttle
 
@@ -563,7 +699,7 @@ REST_FRAMEWORK={
 ```
 
 
-#### 分页组件
+#### [7-3分页组件](#)
 
 ##### 简单分页
 
@@ -593,7 +729,7 @@ class BookViewSet(viewsets.ModelViewSet):
         return pp.get_paginated_response(bs.data)
 ```
 
-#### 序列化
+#### [7-4序列化](#)
 - serializers
 
 
@@ -657,7 +793,7 @@ class AlbumSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-#### 登录模式
+#### [7-6认证](#)
 
 
 ##### 局部认证
@@ -696,7 +832,7 @@ REST_FRAMEWORK = {
 
 
 
-#### [解析器](https://www.cnblogs.com/derek1184405959/p/8768059.html)
+#### [7-5解析器](https://www.cnblogs.com/derek1184405959/p/8768059.html)
 
 ##### request
 
@@ -730,11 +866,11 @@ REST_FRAMEWORK = {
 
 
 
-### 项目执行小技巧
+### [8项目执行小技巧](#)
 
 
 
-#### url的包装
+#### [8-1包装](#)
 
 - 根url
 ```
@@ -768,7 +904,7 @@ urlpatterns = [
 
 
 
-#### 初期的状态码定义等
+#### [8-2初期的状态码定义等](#)
 
 
 ```
@@ -837,13 +973,13 @@ XopsResponse(data)等，比较好的将参数返回前端，前端根据以此�
 
 
 
-#### 跨域的解决
+#### [8-3跨域的解决](#)
 
 - https://segmentfault.com/a/1190000018025987
 - https://github.com/adamchainz/django-cors-headers
 
 
-#### [中间件的问题](https://www.cnblogs.com/derek1184405959/p/8445842.html)
+#### [8-4中间件的问题](https://www.cnblogs.com/derek1184405959/p/8445842.html)
 
 - 中间件其实就是一个类，在请求来和结束后，django 会根据自己的规则在合适的实际执行执行相对于的中间件中相应的方法
 
@@ -911,7 +1047,7 @@ process_response(self, request, response)
 
 
 
-#### model 转字典
+#### [8-5.model转字典](#)
 
 - model_to_dict
 
@@ -973,7 +1109,7 @@ class User(models.Model):
 ```
 
 
-#### "__"的使用
+#### [8-6"__"的使用](#)
 
 2. 双下划线表示的是连表的操作
 
@@ -1007,7 +1143,7 @@ lookup_field = 'grade_name_id'
 
 
 
-#### serializers 的问题
+#### [8-7serializers 的问题](#)
 
 资料：
 - https://juejin.im/post/5a68934551882573443cddf8
@@ -1146,7 +1282,7 @@ depth 就表示深度，默认为0，最好别弄得非常多层。
 
 
 
-#### 视图
+#### [8-8视图](#)
 
 这个可以先查阅下源码，这样在使用时心中有数，错误也好排查
 
@@ -1190,7 +1326,7 @@ http://xx.com/api/multiple_delete/?deleteid=173,174,175
 
 
 
-#### 信号
+#### [8-11.信号](#)
 
 - https://juejin.im/post/5b960c0bf265da0ad70189a4
 -
@@ -1220,7 +1356,7 @@ def create_user(sender, instance=None, created=False, **kwargs):
 
 
 
-#### 依赖包问题
+#### [8-11.依赖包问题](#)
 
 将依赖包导入到requirements.txt里面
 ```
@@ -1234,7 +1370,7 @@ pip freeze > requirements.txt
 pip install -r requirement.txt
 ```
 
-#### restful api
+#### [8-12.RESTFUL API](#)
 
 有时候我们确实不不好用名词一个接口写增删改查使用，增删改查分开来如何写呢？
 
@@ -1252,9 +1388,9 @@ urlpatterns = [
 
 
 
-### 服务器问题
+### [8-13服务器问题]()
 
-#### mysql下载
+#### [8-13-1mysql下载](#)
 
 
 
@@ -1292,7 +1428,7 @@ flush privileges;
 ```
 
 
-#### python 3.6安装
+#### [8-13-2.python 3.6安装](#)
 
 
 ```
@@ -1330,7 +1466,7 @@ ln -s /usr/local/bin/python3.6 /usr/bin/python3
 
 注意需要安装gcc 解释器，这个是源码安装，比较慢
 
-#### 虚拟环境的安装
+#### [8-13-3虚拟环境的安装](#)
 
 
 ```
@@ -1377,7 +1513,7 @@ pip install -r requirements.txt
 
 
 
-#### WSGI
+#### [8-13-4.WSGI](#)
 
 - 描述web server如何与web application通信的一种规范
 
@@ -1418,7 +1554,7 @@ daemonize = /root/projects/Mxshop/MxShop/uWSGI.log
 
 
 
-#### django的一些常用命令
+#### [8-14.django的一些常用命令](#)
 
 
 ```
@@ -1476,7 +1612,7 @@ python manage.py startapp [name]                # 创建一个app
 ```
 
 
-#### 豆瓣源
+#### [8-15.豆瓣源](#)
 
 
 ```
@@ -1490,3 +1626,37 @@ pip install -i https://pypi.douban.com/simple xxx模块
 
 - 参考连接 
 - https://www.kancloud.cn/hmoonmoon/django/738443
+- 
+
+### 使用过的相关库
+
+
+
+```
+beautifulsoup4==4.8.0                       # xpath解析
+cryptography==1.9                           # 加密算法
+Django==2.0.2
+django-ckeditor==5.7.1                      # django集成富文本
+django-cors-headers==2.2.0                  # 跨站
+django-debug-toolbar==2.0                   # 调试专用
+django-filter==1.1.0                        # 强大过滤
+django-import-export==1.2.0                 # 导出
+django-rest-swagger==2.2.0                  # API文档
+django-simple-history==2.7.3                # 操作历史
+django-simpleui==2.6                        # UI后台框架
+djangorestframework==3.10.2                 # RESTAPI框架
+djangorestframework-jwt==1.11.0             # jwt认证
+drf-extensions==0.3.1                       # 缓存
+Jinja2==2.10                                # 后台引擎
+Markdown==2.6.11                            # 和restframework配套使用接口相关
+pycryptodome==3.6.1                         # 加密相关
+PyMySQL==0.8.0                              # mysql驱动
+pytest==5.1.2                               # 单元测试
+requests==2.18.4                            # http请求
+social-auth-app-django==2.1.0               # 第三方登录
+urllib3==1.22                               # http请求相关
+wechatpy==1.8.3                             # 第三方微信支付相关
+xlrd==1.1.0                                 # 读excel
+xlwt==1.3.0                                 # 写excel
+DjangoUeditor                               # 百度富文本
+```
