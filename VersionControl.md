@@ -297,7 +297,6 @@ self.initialize_request(request, *args, **kwargs)
 我们可以看到他是将我们封装后的新的request继续往下传递，然后执行
 
 ```
-
 ![](https://raw.githubusercontent.com/jusk9527/images/master/data/20191113175609.png)
 
 ##### [self.initial()]()
