@@ -47,7 +47,7 @@ django+drf 前后端分离总结
             * [8-12-4. WSGI](#8-12-4WSGI)
         * [8-14. django的一些常见命令](#8-14django的一些常见命令)
         * [8-15. 豆瓣源](#8-15豆瓣源)
-        * [8-16. 相关库](#8-16相关)
+        * [8-16. python多版本配置](#8-16python多版本配置)
 
 
 ## 一.django常见问题
@@ -468,7 +468,7 @@ Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),question__startswith
 ```
 
 
-### [4.Model中ForeignKey字段中的on_delete参数有什么作用](#)
+### [4.Model中ForeignKey字段中的on_delete参数有什么作用](https://blog.csdn.net/buxianghejiu/article/details/79086011)
 
 on_delete 有CASCADE、PROTECT、SET_NULL、SET_DEFAULT、SET()
 
@@ -1611,22 +1611,37 @@ python manage.py startapp [name]                # 创建一个app
     runserver                                   # 使用开发者服务器运行，后面可以加端口
 ```
 
+```markdown
+使用举例
+
+python manage.py startapp app_name          # 创建一个app
+```
+
 
 #### [8-15.豆瓣源](#)
 
 
 ```
 pip install -i https://pypi.douban.com/simple xxx模块
-
 ```
+#### [8-16.python多版本配置](https://www.jianshu.com/p/bcb3f1be9073)
 
+**pyenv版本管理**
+
+[使用国内源](https://www.cnblogs.com/ilovewindy/articles/6181502.html)
+
+[或者国内源](https://www.jianshu.com/p/cb7a128b284b)
+
+
+#### 运维监控
+- [sentry](https://github.com/getsentry/sentry)
+[docker 搭建](https://www.jianshu.com/p/cea2d22fbb32)
 
 
 ### django 的一些常见问题
 
 - 参考连接 
 - https://www.kancloud.cn/hmoonmoon/django/738443
-- 
 
 ### 使用过的相关库
 

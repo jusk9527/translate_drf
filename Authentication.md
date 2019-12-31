@@ -42,6 +42,37 @@ https://www.chenshaowen.com/blog/reflection-of-python.html
 4. delattr(object,’name’)
 删除对象object的name属性值。
 
+
+
+举个栗子
+import requests
+
+class Http(object):
+
+
+    def get(self,url):
+        res = requests.get(url)
+        response = res.text
+        return response
+
+    def post(self,url):
+        res = requests.post(url)
+        response = res.text
+        return response
+
+# 使用反射后
+url = "https://www.jianshu.com/u/14140bf8f6c7"
+method = input("请求方法>>>:")
+h = Http()
+
+if hasattr(h,method):
+    func = getattr(h,method)
+    res = func(url)
+    print(res)
+else:
+    print("你的请求方式有误...")
+    
+
 https://www.chenshaowen.com/blog/reflection-of-python.html
 
 
@@ -598,7 +629,7 @@ authentication_classes =[]
 
 - models
 
-```
+```python
 from django.db import models
 
 class UserInfo(models.Model):
@@ -614,7 +645,7 @@ class UserToken(models.Model):
 - urls.py
 
 
-```
+```python
 from django.conf.urls import url
 from django.contrib import admin
 from .models import views
@@ -628,7 +659,7 @@ urlpatterns = [
 - views.py
 
 
-```
+```python
 from django.shortcuts import  HttpResponse
 from django.http import JsonResponse
 from rest_framework.views import APIView
