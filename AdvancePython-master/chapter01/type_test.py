@@ -20,3 +20,17 @@ print(type.__bases__)
 print(object.__bases__)
 print(type(object))
 
+
+
+# <class 'int'>
+# <class 'type'>
+# <class 'str'>
+# <class 'type'>
+# <class '__main__.Student'>
+# <class 'type'>
+# (<class 'object'>,)
+# (<class 'object'>,)
+# (<class 'object'>,)
+# (<class 'object'>,)
+# ()
+# <class 'type'>

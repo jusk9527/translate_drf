@@ -8,7 +8,15 @@ stu = Student()
 
 def say_teacher():
     print("i am teacher")
+    return "good"
 
 stu.say = say_teacher
 
 stu.say()
+
+print(stu.say())
+
+
+# i am teacher
+# i am teacher
+# good

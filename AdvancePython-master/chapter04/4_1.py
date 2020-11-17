@@ -35,6 +35,6 @@ name_tuple = ["bobby3", "bobby4"]
 name_set = set()
 name_set.add("bobby5")
 name_set.add("bobby6")
-a.extend()
+a.extend(b)
 print(a)
 

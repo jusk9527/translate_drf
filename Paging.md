@@ -1,7 +1,7 @@
 ### 内置分页器
 #### 分页基类
 
-```
+```python
 class BasePagination:
     display_page_controls = False
 
@@ -33,7 +33,7 @@ class BasePagination:
 - for example
 - http://api.example.org/accounts/?page=4
 - http://api.example.org/accounts/?page=4&page_size=100
-```
+```python
 class PageNumberPagination(BasePagination):
     """
     A simple page number based style that supports page numbers as
@@ -256,7 +256,7 @@ class PageNumberPagination(BasePagination):
 - http://api.example.org/accounts/?limit=100
 - http://api.example.org/accounts/?offset=400&limit=100
 
-```
+```python
 class LimitOffsetPagination(BasePagination):
     """
     A limit/offset based style. For example:
@@ -483,7 +483,7 @@ class LimitOffsetPagination(BasePagination):
 - 游标分页，意思就是每次返回当前页、上一页、下一页，并且每次的上一页和下一页的url是不规则的
 - 优点是不管数据多大快的很
 
-```
+```python
 class CursorPagination(BasePagination):
     """
     The cursor pagination implementation is necessarily complex.
@@ -894,7 +894,7 @@ class CursorPagination(BasePagination):
 #### 使用实例
 
 - get方法请求实例
-```
+```python
 from rest_framework import serializers
 from rest_framework.response import Response   #使用DRF自带的响应页面更美观
 from rest_framework.pagination import PageNumberPagination
@@ -925,7 +925,7 @@ class RoleView(APIView):
 - ModelViewSet等继承的使用
 
 
-```
+```python
 class UserViewSet(ModelViewSet):
     '''
     用户管理：增删改查

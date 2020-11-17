@@ -11,11 +11,13 @@ django+drf 前后端分离总结
         * [2-4 邮件](#2-4邮件)
         * [2-5 分页](#2-5分页)
         * [2-6 静态文件管理](#2-6静态文件管理)
+        * [2-7 事物]()
      * [3. ORM的一些常用方法](#3orm的一些常用方法)
         * [3-1 返回Queryset方法的API](#3-1返回queryset方法的api)
         * [3-2 ORM中能写sql语句的方法](#3-2orm中能写sql语句的方法)
         * [3-3 ORM高级用法](#3-3orm高级用法)
         * [3-4 F与Q的作用](#F与Q的作用)
+        * [3-5 批量插入](#批量插入)
      * [4. Model中ForeignKey字段中的on_delete参数有什么作用](#4Model中ForeignKey字段中的on_delete参数有什么作用)
      * [5. Model中怎么ManyToManyField怎么接受删除增加](#5Model中怎么ManyToManyField怎么接受删除增加)
      * [6. Django实现websocket](#6Django实现websocket)
@@ -47,7 +49,7 @@ django+drf 前后端分离总结
             * [8-12-4. WSGI](#8-12-4WSGI)
         * [8-14. django的一些常见命令](#8-14django的一些常见命令)
         * [8-15. 豆瓣源](#8-15豆瓣源)
-        * [8-16. 相关库](#8-16相关)
+        * [8-16. python多版本配置](#8-16python多版本配置)
 
 
 ## 一.django常见问题
@@ -301,6 +303,77 @@ STATICFILES_DIRS = (
 ```
 
 
+#### [2-7 事物](https://my.oschina.net/u/4365358/blog/4093288)
+
+
+```
+概念
+
+MySQL 事务主要用于处理操作量大，复杂度高的数据。比如说，在人员管理系统中，你删除一个人员，你既需要删除人员的基本资料，也要删除和该人员相关的信息，如信箱，文章等等，这样，这些数据库操作语句就构成一个事务！
+
+理解：一组sql语句的集合
+
+4 个条件
+
+1. 原子性：一个事务（transaction）中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样
+
+2. 一致性：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设规则，这包含资料的精确度、串联性以及后续数据库可以自发性地完成预定的工作。
+
+3. 隔离性：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。
+
+4. 持久性：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。
+
+
+常常使用方式
+
+ 1 from django.shortcuts import render
+ 2 from django.http import HttpResponse
+ 3 from django.views.generic import View
+ 4 from django.db import transaction   # 导入事务
+ 5  
+ 6  
+ 7 # 类视图 (事务,@transaction.atomic装饰器)
+ 8 class MyView(View):
+ 9  
+10     @transaction.atomic
+11     # transaction.atomic装饰器可以保证该函数中所有的数据库操作都在一个事务中。
+12     def post(self, request):
+13  
+14         # 数据库操作1。。。
+15         # 数据库操作2。。。
+16         
+17         return HttpResponse('ok')
+18  
+19  
+20 # 类视图 (事务,保存点的使用)
+21 class MyView2(View):
+22     @transaction.atomic
+23     def post(self, request):
+24  
+25         # 设置事务保存点
+26         s1 = transaction.savepoint()   # 可以设置多个保存点
+27  
+28         # 数据库操作。。。
+29  
+30         # 事务回滚 (如果发生异常,就回滚事务)
+31         transaction.savepoint_rollback(s1)  # 可以回滚到指定的保存点
+32  
+33         # 提交事务 (如果没有异常,就提交事务)
+34         transaction.savepoint_commit(s1)
+35  
+36         # 返回应答
+37         return HttpResponse('ok')
+
+
+比如我们在并发请求经常使用事物进行加锁修改表里的数据
+
+with transaction.atomic():
+    task = modelname.objects.select_for_update().get(id=id)
+    task.dd = 'cc'
+    task.save()
+```
+
+
 
 ### [3.ORM的一些常用方法](#)
 - [3-1返回Queryset方法的API](#)
@@ -467,8 +540,23 @@ Asset.objects.get(
 Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),question__startswith='Who')
 ```
 
+- [3-5 批量插入](https://www.jianshu.com/p/aded5b2029f6)
 
-### [4.Model中ForeignKey字段中的on_delete参数有什么作用](#)
+
+```
+Entry.objects.bulk_create([
+    Entry(headline='This is a test'),
+    Entry(headline='This is only a test'),
+])
+
+类似于
+
+Entry.objects.create(headline='This is a test')
+Entry.objects.create(headline='This is only a test')
+```
+
+
+### [4.Model中ForeignKey字段中的on_delete参数有什么作用](https://blog.csdn.net/buxianghejiu/article/details/79086011)
 
 on_delete 有CASCADE、PROTECT、SET_NULL、SET_DEFAULT、SET()
 
@@ -562,6 +650,8 @@ class TeamsUpdateSerializer(serializers.ModelSerializer):
 - 使用Channels实现websocket
 
 https://www.jianshu.com/p/3de90e457bb4
+https://github.com/jusk9527/websocket
+
 
 
 ## [二.DRF常见问题](#)
@@ -864,8 +954,13 @@ REST_FRAMEWORK = {
 
 
 
+#### [奇淫技巧]()
 
+https://blog.csdn.net/junxieshiguan/article/details/88761783
 
+[django rest framework 向数据库中插入数据时处理外键的方法](https://www.cnblogs.com/lowmanisbusy/p/9125454.html)
+
+https://www.liujiangblog.com/blog/43/
 ### [8项目执行小技巧](#)
 
 
@@ -1611,52 +1706,41 @@ python manage.py startapp [name]                # 创建一个app
     runserver                                   # 使用开发者服务器运行，后面可以加端口
 ```
 
+```markdown
+使用举例
+
+python manage.py startapp app_name          # 创建一个app
+```
+
 
 #### [8-15.豆瓣源](#)
 
 
 ```
 pip install -i https://pypi.douban.com/simple xxx模块
-
 ```
+#### [8-16.python多版本配置](https://www.jianshu.com/p/bcb3f1be9073)
 
+**pyenv版本管理**
+
+[使用国内源](https://www.cnblogs.com/ilovewindy/articles/6181502.html)
+
+[或者国内源](https://www.jianshu.com/p/cb7a128b284b)
+
+
+#### 运维监控
+- [sentry](https://github.com/getsentry/sentry)
+[docker 搭建](https://www.jianshu.com/p/cea2d22fbb32)
 
 
 ### django 的一些常见问题
 
 - 参考连接 
 - https://www.kancloud.cn/hmoonmoon/django/738443
-- 
-
-### 使用过的相关库
 
 
 
-```
-beautifulsoup4==4.8.0                       # xpath解析
-cryptography==1.9                           # 加密算法
-Django==2.0.2
-django-ckeditor==5.7.1                      # django集成富文本
-django-cors-headers==2.2.0                  # 跨站
-django-debug-toolbar==2.0                   # 调试专用
-django-filter==1.1.0                        # 强大过滤
-django-import-export==1.2.0                 # 导出
-django-rest-swagger==2.2.0                  # API文档
-django-simple-history==2.7.3                # 操作历史
-django-simpleui==2.6                        # UI后台框架
-djangorestframework==3.10.2                 # RESTAPI框架
-djangorestframework-jwt==1.11.0             # jwt认证
-drf-extensions==0.3.1                       # 缓存
-Jinja2==2.10                                # 后台引擎
-Markdown==2.6.11                            # 和restframework配套使用接口相关
-pycryptodome==3.6.1                         # 加密相关
-PyMySQL==0.8.0                              # mysql驱动
-pytest==5.1.2                               # 单元测试
-requests==2.18.4                            # http请求
-social-auth-app-django==2.1.0               # 第三方登录
-urllib3==1.22                               # http请求相关
-wechatpy==1.8.3                             # 第三方微信支付相关
-xlrd==1.1.0                                 # 读excel
-xlwt==1.3.0                                 # 写excel
-DjangoUeditor                               # 百度富文本
-```
+
+其他资料
+
+[ORM 具体使用](https://my.oschina.net/zerobit/blog/3084775)
